@@ -1,4 +1,4 @@
-from .errors import InterpSyntaxError, pretty_type
+from .errors import InterpSyntaxError, InterpTypeError, pretty_type
 """
 Expressions
 """
