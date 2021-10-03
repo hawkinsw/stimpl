@@ -387,14 +387,14 @@ def run_stimpl_sanity_tests():
     # (i = 10) * (i + (j = 11))
     # i = 10
     # j = 11
-    # result = 10 * (10 + 11) = 31
+    # result = 10 * (10 + 11) = 210
     program = Multiply(Assign(Variable("i"),IntLiteral(10)), Add(Variable("i"), Assign(Variable("j"), IntLiteral(11))))
     run_value, run_type, run_state = run_stimpl(program)
     check_equal((210, Integer()), (run_value, run_type))
     check_equal((10, Integer()), run_state.get_value("i"))
     check_equal((11, Integer()), run_state.get_value("j"))
 
-    # (i = 10) + (i + (j = 10))
+    # (i = 10) / (i + (j = 10))
     # i = 10
     # j = 10
     # result = 10 / (10 + 10) = 0
