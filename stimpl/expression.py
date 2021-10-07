@@ -13,6 +13,8 @@ Unit expression.
 class Ren(Expr):
   def __init__(self):
     pass
+  def __repr__(self):
+    return f"Ren value"
 
 """
 Literal expressions.

@@ -6,7 +6,6 @@ Interpreter State
 class State(object):
   def __init__(self):
     self.state = {}
-    pass
 
   def set_value(self, variable_name, variable_value, variable_type):
     new_state = State()
