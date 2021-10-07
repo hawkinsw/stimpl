@@ -305,6 +305,12 @@ def run_stimpl_sanity_tests():
         Ren())
     check_run_result((None, Unit(), None), run_stimpl(program))
 
+    # Check whether If expression condition must be a Boolean.
+    program = If(IntLiteral(1),\
+        Variable("i"),\
+        Variable("i"))
+    check_program_raises(InterpTypeError(), program)
+
     # Check whether If expression condition can have side-effects.
     program = If(Ne(IntLiteral(0), Assign(Variable("i"), IntLiteral(10))),\
         Variable("i"),\
@@ -328,6 +334,7 @@ def run_stimpl_sanity_tests():
     check_equal(("Else", String()), run_state.get_value("i"))
 
     ## Make sure that While loops work! (10 pts)
+    # Generic While loop
     program = Program(\
         Assign(Variable("j"), IntLiteral(0)),\
         While(Lt(Variable("j"), IntLiteral(10)),\
@@ -338,6 +345,17 @@ def run_stimpl_sanity_tests():
         )
     run_value, run_type, run_state = run_stimpl(program)
     check_equal((10, Integer()), run_state.get_value("j"))
+
+    # While loop with non-Boolean condition should raise InterpTypeError
+    program = Program(\
+        Assign(Variable("j"), IntLiteral(0)),\
+        While(IntLiteral(10),\
+          Sequence(\
+            Assign(Variable("j"), Add(Variable("j"), IntLiteral(1))),\
+            )\
+          )\
+        )
+    check_program_raises(InterpTypeError(), program)
 
     ## Once a variable is assigned, its type is fixed. Check
     ## to make sure that reassigning to a value with a different
@@ -407,4 +425,4 @@ def run_stimpl_sanity_tests():
   except Exception as e:
     raise e
 
-  print("All tests ran successfully!")
+  print("All (sanity) tests ran successfully!")
