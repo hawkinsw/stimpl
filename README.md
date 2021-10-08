@@ -135,7 +135,7 @@ and have a value of `"Else"` and string type. In general, the syntax for an if e
 And, don't forget loops:
 
 ```
-Program(\\
+Program(\
       Assign(Variable("i"), IntLiteral(0)),\
       While(Lt(Variable("i"), IntLiteral(10)),\
         Sequence(\
