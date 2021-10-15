@@ -139,6 +139,11 @@ def run_stimpl_sanity_tests():
     program = Divide(Ren(), Ren())
     check_program_raises(InterpTypeError(), program)
 
+    program = Divide(IntLiteral(1), IntLiteral(0))
+    check_program_raises(InterpMathError(), program)
+    program = Divide(FloatingPointLiteral(1.0), FloatingPointLiteral(0.0))
+    check_program_raises(InterpMathError(), program)
+
     ## String concatenation (5 pts)
     program = Add(StringLiteral("Hello"), StringLiteral(", World"))
     check_run_result(("Hello, World", String(), None), run_stimpl(program))

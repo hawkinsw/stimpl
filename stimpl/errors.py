@@ -19,5 +19,11 @@ class InterpTypeError(InterpError):
       error_msg = "InterpTypeError"
     super().__init__(error_msg)
 
+class InterpMathError(InterpError):
+  def __init__(self, error_msg = None):
+    if error_msg == None:
+      error_msg = "InterpMathError"
+    super().__init__(error_msg)
+
 def pretty_type(value):
   return f"{str(type(value).__name__)}"
