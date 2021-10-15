@@ -164,7 +164,7 @@ In general, the format of a while loop is `While(condition, body)` where `condit
 
 # STIMPL Requirements
 
-## Type Requirements
+## Types
 
 Any time that there is a type error, STIMPL will raise an `InterpTypeError`. STIMPL has compile time and runtime type errors. Here are the compile-time type rules:
 
@@ -260,12 +260,13 @@ will raise an `InterpSyntaxError` at runtime.
 4.  Unit is equal to unit.
 5.  Boolean operators behave "as usual".
 6.  Add, Subtract, Multiply and Divide operators work "as usual" on floating-point values.
-6. The divide operator performs integer division when its parameters are integers (_e.g._, e.g., 5/10 = 0)
-7. Add operator performs string concatenation when its operands are string values.
-8. Operands are evaluated left-to-right.
-9. There is _no_ short-circuit evaluation.
-10. The body of a while loop is repeatedly executed until the condition becomes false.
-11. The then branch of an if statement is executed when the condition is true; the else branch of an if statement is executed otherwise.
+7. The divide operator performs integer division when its parameters are integers (_e.g._, 5/10 = 0)
+8. An attempt to divide by zero (either floating-point or integer) raises an `InterpMathError`. 
+9. Add operator performs string concatenation when its operands are string values.
+10. Operands are evaluated left-to-right.
+11. There is _no_ short-circuit evaluation.
+12. The body of a while loop is repeatedly executed until the condition becomes false.
+13. The then branch of an if statement is executed when the condition is true; the else branch of an if statement is executed otherwise.
 
 ## Values and Types
 
