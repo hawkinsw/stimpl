@@ -287,7 +287,7 @@ As the program executes, it always has a state to hold the current value of the 
 
 ## Evaluate
 
-`evaluate` (stimpl/runtime.py) is the main driver of the STIMPL interpreter. As parameters, it takes a variable whose type is an expression and a variable whose type is a program state.
+`evaluate` (`stimpl/runtime.py`) is the main driver of the STIMPL interpreter. As parameters, it takes a variable whose type is an expression and a variable whose type is a program state.
 
 ```
 def evaluate(expression, state):
@@ -315,7 +315,7 @@ case Variable(variable_name=variable_name):
       return (*value, state)
 ```
 
-would execute. This implementation code generates a 3-tuple `(_value_, _type_, state)` where _`value`_ and `_type_` are the value and type of `i`, respectively. Notice that the "updated" program state after evaluating this expression is no different than the program state before evaluating this expression. In other words, accessing the value of a variable does not change the program's state! Remember operational semantics!
+would execute. This implementation code generates a 3-tuple `(value, type, state)` where `value` and `type` are the value and type of `i`, respectively. Notice that the "updated" program state after evaluating this expression is no different than the program state before evaluating this expression. In other words, accessing the value of a variable does not change the program's state! Remember operational semantics!
 
 Take a very close look at the expressions that are already implemented in `evaluate` -- there is a pattern that should emerge that will help you implement the remaining functionality!
 
@@ -359,7 +359,7 @@ The first step is to download the skeleton code. It is available on GitHub at [h
 
 The next step is to make sure that you have Python 3.10 installed and available. Python 3.10 is not quite officially released. But that's okay, it's far enough along that we can use it! You can find the latest information on how to access it at Python [website](https://www.python.org/downloads/release/python-3100rc2/).
 
-The final step before you get started programming is to make sure that you can execute the code in `shakedown_stimpl.py`.If you have a sane Python 3.10 installation and everything configured correctly, you should see
+The final step before you get started programming is to make sure that you can execute the code in `shakedown_stimpl.py`. If you have a sane Python 3.10 installation and everything configured correctly, you should see
 
 ```
 Hello, World
@@ -367,7 +367,7 @@ Hello, World
 
 printed on the console when you execute `shakedown_stimpl.py`
 
-In order to judge your progress on the assignment, use the code in test\_stimpl.py. You will know that you are almost done with this assignment when you execute the code in that file and see
+In order to judge your progress on the assignment, use the code in `test_stimpl.py`. You will know that you are almost done with this assignment when you execute the code in that file and see
 
 ```
 All tests ran successfully!
@@ -381,7 +381,7 @@ Your grade will be calculated (out of 100 total possible points) according to th
 
 |Points|Category|Description|
 |---|---|---|
-|  80 | Implementation completeness  |  You will receive up to 80 points depending on how many of the supplied tests pass on your implementation. See stimply/test.py for the exact relationship between points and tests. |
+|  80 | Implementation completeness  |  You will receive up to 80 points depending on how many of the supplied tests pass on your implementation. See `stimply/test.py` for the exact relationship between points and tests. |
 |  10 | Robustness  | You will receive up to 10 points depending on whether your implementation passes additional robustness tests.  |
 | 10 | Hygiene | You will receive up to 10 points depending on the hygiene of your code -- good comments, good style, good variable names, modularity, etc. |
 
