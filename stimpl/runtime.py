@@ -49,7 +49,7 @@ Main evaluation logic!
 """
 
 
-def evaluate(expression, state) -> Tuple[Optional[Any], Type, State]:
+def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State]:
     match expression:
         case Ren():
             return (None, Unit(), state)

@@ -4,7 +4,7 @@
 
 STIMPL is a Turing-complete imperative programming language -- it includes dynamically typed variables, mathematical expressions, (basic) console IO, loops, and conditionals. Though the binding of variables to types is done at runtime (in particular, the time of the first assignment), the language is strongly typed -- type errors are always detected! STIMPL has no scopes and no functions.
 
-Here is a short example STIMPL program that assigns the value of 4 to a variable named _four_:
+Here is a short example STIMPL program that assigns the value of `4` as an integer type) to a variable `four`:
 
 ```
 Program(Assign(Variable("four"), Add(IntLiteral(2), IntLiteral(2))))
@@ -12,7 +12,7 @@ Program(Assign(Variable("four"), Add(IntLiteral(2), IntLiteral(2))))
 
 You can _read_ that program like this:
 
-> Assign variable _four_ to the result of the addition of the integer literal 2 with the integer literal of 2. 
+> Assign variable `four` to the result of the addition of the integer literal 2 with the integer literal of 2.
 
 Everything in STIMPL is an expression. In other words, everything in STIMPL has a type and a value. The most basic expression in STIMPL is the _ren_ \-- it has no value and a _unit_ type. In STIMPL you generate a ren like
 
@@ -38,11 +38,12 @@ The program above simply does nothing three times. In STIMPL, a sequence is syno
 
 ```
 Sequence(Ren(), Ren(), Ren())
+Program(Ren(), Ren(), Ren())
 ```
 
-In general, the syntax for a program or sequence is `Program(_expression_[, _expression_[,...]])` or `Sequence(_expression_[, _expression_[,...]])`, respectively.
+are exactly the same. In general, the syntax for a program or sequence is `Program(`_expression_`[, `_expression_`[,...]])` or `Sequence(`_expression_`[, `_expression_`[,...]])`, respectively, where _expression_ is any expression (even another program or sequence because, again, *everything* in STIMPL is an expression!).
 
-The value and type of a sequence of expressions (program, respectively) are the value and type of the final expression in the sequence. For example:
+The value and type of a sequence/program of expressions are the value and type of the final expression in the sequence/program. For example:
 
 ```
 Program(Assign(Variable("five"), IntLiteral(10)),\
@@ -68,7 +69,7 @@ In STIMPL, it's easy to print the value of an expression to the screen:
 
 `Print(Ren())`
 
-prints the value of the _ren_ to the screen. In general, the syntax for printing an expression is `Print(expr)` where `expr` is any expression.
+prints the value of the _ren_ to the screen. In general, the syntax for printing an expression is `Print(`_expression_`)` where _expression_ is any expression.
 
 STIMPL has _boolean_, _string_, _floating-point number,_ _integer_, and _unit_ types. You can perform the normal mathematical operations on integers and floating-point numbers:
 
@@ -85,38 +86,38 @@ _**All operands are evaluated left-to-right.**_
 You can also perform "addition" on strings -- concatenation:
 
 ```
-Add(StringLiteral("testing"), StringLiteral(", one two three.")),
+Add(StringLiteral("testing"), StringLiteral(", one two three."))
 ```
 
 And, we can't forget about booleans!
 
 ```
 BooleanLiteral(True)
-BooleanLiteral(True)
+BooleanLiteral(False)
 ```
 
-You can operate on booleans with and, or and not:
+You can operate on booleans with logical ands, ors and nots:
 
 ```
-And(BooleanLiteral(True), BooleanLiteral(False))  
-Or(BooleanLiteral(True), BooleanLiteral(False))  
+And(BooleanLiteral(True), BooleanLiteral(False))
+Or(BooleanLiteral(True), BooleanLiteral(False))
 Not(BooleanLiteral(True))
 ```
 
-And, you can create booleans with relational operators:
+And, you can create booleans with relational and equality operators:
 
 ```
-Lt(BooleanLiteral(False), BooleanLiteral(True))  
-Lte(IntLiteral(5), IntLiteral(5))  
-Eq(StringLiteral("testing"), StringLiteral("testing"))  
-Ne(StringLiteral("t3sting"), StringLiteral("testing"))  
-Gt(StringLiteral("beta"), StringLiteral("alpha"))  
+Lt(BooleanLiteral(False), BooleanLiteral(True))
+Lte(IntLiteral(5), IntLiteral(5))
+Eq(StringLiteral("testing"), StringLiteral("testing"))
+Ne(StringLiteral("t3sting"), StringLiteral("testing"))
+Gt(StringLiteral("beta"), StringLiteral("alpha"))
 Gte(IntLiteral(5), IntLiteral(5))
 ```
 
-The relational operators are defined on all types (see below for the exact details)!
+The relational and equality operators are defined on all types (see below for the exact details)!
 
-That's all well and good and gives us the power to write sequential programs. But, what about programs that operate selectively? STIMPL has if expressions:
+That's all well and good and gives us the power to write sequential programs. But, what about programs that need to perform certain actions selectively? STIMPL has if expressions:
 
 ```
 If(And(BooleanLiteral(False), BooleanLiteral(True)),\
@@ -124,13 +125,13 @@ If(And(BooleanLiteral(False), BooleanLiteral(True)),\
       Print(StringLiteral("Else")))
 ```
 
-That expression will print
+will print
 
 ```
 Else
 ```
 
-and have a value of `"Else"` and string type. In general, the syntax for an if expression is `If(condition, then, else)` where `condition` is any expression whose type is boolean and `then` and `else` are expressions. If you don't want to do anything in the case that `condition` is false, use `Ren()` as the `else` expression.
+Not to sound like a broken record, but because everything in STIMPL is an expression, if expressions have a value and a type. The value and type of the expression in the example above are `"Else"` and string, respectively. In general, the syntax for an if expression is `If(condition, then, else)` where `condition` is any expression whose type is boolean and `then` and `else` are expressions. If you don't want to do anything in the case that `condition` is false, use `Ren()` as the `else` expression.
 
 And, don't forget loops:
 
@@ -148,25 +149,25 @@ Program(\
 That program will print:
 
 ```
-1  
-2  
-3  
-4  
-5  
-6  
-7  
-8  
-9  
+1
+2
+3
+4
+5
+6
+7
+8
+9
 10
 ```
 
-In general, the format of a while loop is `While(condition, body)` where `condition` is any expression with a boolean type and `body` is any expression. The value and type of a while loop are false and boolean.
+In general, the format of a while-loop expression is `While(condition, body)` where `condition` is any expression with a boolean type and `body` is any expression. The value and type of a while loop are false and boolean.
 
 # STIMPL Requirements
 
 ## Types
 
-Any time that there is a type error, STIMPL will raise an `InterpTypeError`. STIMPL has compile time and runtime type errors. Here are the compile-time type rules:
+Any time that there is a type error, STIMPL will raise an `InterpTypeError`. STIMPL has compile-time and runtime type errors. Here are the compile-time type rules:
 
 1.  Literals must be the appropriate type:
     1.  An `IntLiteral` must be created from a Python `int`.
@@ -254,14 +255,14 @@ will raise an `InterpSyntaxError` at runtime.
 
 ## Semantics
 
-1.  Relational operators behave "as usual" for integer and floating-point types.
+1.  Relational/equality operators behave "as usual" for integer and floating-point types.
 2.  Relational operators perform [lexicographical comparison](https://en.wikipedia.org/wiki/Lexicographic_order) for string types.
 3.  False is less than true.
 4.  Unit is equal to unit.
 5.  Boolean operators behave "as usual".
 6.  Add, Subtract, Multiply and Divide operators work "as usual" on floating-point values.
 7. The divide operator performs integer division when its parameters are integers (_e.g._, 5/10 = 0)
-8. An attempt to divide by zero (either floating-point or integer) raises an `InterpMathError`. 
+8. An attempt to divide by zero (either floating-point or integer) raises an `InterpMathError`.
 9. Add operator performs string concatenation when its operands are string values.
 10. Operands are evaluated left-to-right.
 11. There is _no_ short-circuit evaluation.
@@ -277,42 +278,48 @@ will raise an `InterpSyntaxError` at runtime.
 5. The value and type of an if expression is the value and type of the last expression in the sequence of expressions executed based on the value of the condition.
 6. The value and type of a while expression is false and boolean.
 
-## STIMPL Implementation
+### STIMPL Implementation
 
-You have been given a significant amount of skeleton code to start your implementation. Begin this assignment by understanding what is included.
+You have been given a significant amount of skeleton code to start your implementation. Begin this assignment by understanding what is included. The best way to learn your way around the skeleton code is to write some basic STIMPL programs and see what happens!
 
 ## State
 
-As the program executes, it always has a state to hold the current value of the program's variables and their types. Use the `State` class defined in the provided code (`stimpl/runtime.py`). To update values in a state, use the `set_value` method. The `set_value` method takes three parameters: The variable name, the variable value and the variable type. **_`set_value` will not update the state in place -- it will return a copy of the existing state with the appropriate variable updated_**. To retrieve a value from the current state, use the `get_value` method. The `get_value` method returns a tuple whose first element is the variable value and whose second element is the variable type; if `get_value` is called for a variable that is not yet defined in the current state, `None` is returned.
+As the program executes, it always has a state to hold the current value of the program's variables and their types. The interpreter uses the `State` class defined and (partially) implemented in the provided code (`stimpl/runtime.py`) to manage the program's state. To update values in a state, use the `set_value` method. The `set_value` method takes three parameters: The variable name, the variable value and the variable type. **_`set_value` will not update the state in place -- it will return a copy of the existing state with the appropriate variable updated_**. To retrieve a value from the current state, use the `get_value` method. The `get_value` method returns a tuple whose first element is the variable value and whose second element is the variable type; if `get_value` is called for a variable that is not yet defined in the current state, `None` is returned.
 
 ## Evaluate
 
-`evaluate` (`stimpl/runtime.py`) is the main driver of the STIMPL interpreter. As parameters, it takes a variable whose type is an expression and a variable whose type is a program state.
+`evaluate` (`stimpl/runtime.py`) is the main driver of the STIMPL interpreter. As parameters, it takes a variable whose type is a STIMPL expression and a variable whose type is a program state.
 
 ```
-def evaluate(expression, state):
+def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State]:
 ```
 
-`evaluate` uses [pattern matching](https://uc.instructure.com/courses/1476336/pages/pattern-matching-in-python "Pattern Matching in Python") to determine the specific type of expression to be evaluated. Depending on the result of that determination, a specific set of code is executed. That code generates three things:
+It returns a tuple that contains
+1. (optional) value of the expression evaluated
+2. that value's type
+3. the (perhaps) updated state of the STIMPL program
 
-1.  The expression's value.
-2.  The expression's type.
-3.  An updated program state.
+`evaluate` is implemented with pattern matching (see the related documentation on how to write code with pattern matching in Python available on the Canvas site for this course). The pattern matching code is used to determine the specific type of expression to be evaluated. The pattern (pun intended) of using pattern matching to implement an interpreter is incredibly common and used throughout the industry.
 
-These three items are returned as a 3-tuple. For instance, if
+Here are some examples of the return values of the `evaluate` function for certain STIMPL expressions.
+
+For instance, if
 
 ```
 Variable("i")
 ```
 
-and `State()` were passed as `expression` and `state` (respectively) to evaluate,
+and `State()` were passed as `expression` and `state` (respectively) to `evaluate`,
 
-```
+```Python
 case Variable(variable_name=variable_name):
-      value = state.get_value(variable_name)
-      if value == None:
-        raise InterpSyntaxError(f"Cannot read from {variable_name} before assignment.")
-      return (*value, state)
+value = state.get_value(variable_name)
+if value == None:
+      raise InterpSyntaxError(
+            f"Cannot read from {variable_name} before assignment.")
+variable_value, variable_type = value
+return (variable_value, variable_type, state)
+
 ```
 
 would execute. This implementation code generates a 3-tuple `(value, type, state)` where `value` and `type` are the value and type of `i`, respectively. Notice that the "updated" program state after evaluating this expression is no different than the program state before evaluating this expression. In other words, accessing the value of a variable does not change the program's state! Remember operational semantics!
@@ -351,13 +358,42 @@ There are classes already implemented to hold the structure of the binary, unary
 
 # Assignment Requirements
 
-Your assignment is to build on the provided STIMPL code and complete the implementation of the interpreter.
+Your assignment is to build on the provided STIMPL code and complete the implementation of the interpreter. All pieces of the interpreter where you need to write code are listed with `TODO` markers. For instance,
+
+
+```Python
+def get_value(self, variable_name) -> Any:
+      """ TODO: Implement. """
+      return None
+```
+
+*Note*: Where there are `TODO`s, any return values are placeholders only. You may need to modify return values as part of your implementation.
+
+You are responsible for implementing:
+
+| Class | Method | Expression Type |File |
+| -- | -- | -- | -- |
+| `State` | `get_value` | N/A | `stimpl/runtime.py` |
+| N/A | `evaluate` | `Sequence` | `stimpl/runtime.py` |
+| N/A | `evaluate` | `Program` | `stimpl/runtime.py` |
+| N/A | `evaluate` | `Subtract` | `stimpl/runtime.py` |
+| N/A | `evaluate` | `Multiply` | `stimpl/runtime.py` |
+| N/A | `evaluate` | `Divide` | `stimpl/runtime.py` |
+| N/A | `evaluate` | `Or` | `stimpl/runtime.py` |
+| N/A | `evaluate` | `Not` | `stimpl/runtime.py` |
+| N/A | `evaluate` | `If` | `stimpl/runtime.py` |
+| N/A | `evaluate` | `Lte` | `stimpl/runtime.py` |
+| N/A | `evaluate` | `Gt` | `stimpl/runtime.py` |
+| N/A | `evaluate` | `Gte` | `stimpl/runtime.py` |
+| N/A | `evaluate` | `Eq` | `stimpl/runtime.py` |
+| N/A | `evaluate` | `Ne` | `stimpl/runtime.py` |
+| N/A | `evaluate` | `While` | `stimpl/runtime.py` |
 
 ## Getting Started
 
 The first step is to download the skeleton code. It is available on GitHub at [https://github.com/hawkinsw/stimpl](https://github.com/hawkinsw/stimpl). If you are new to git/github, check out this [handbook](https://guides.github.com/introduction/git-handbook/) from GitHub or the project's [website](http://git-scm.com/).
 
-The next step is to make sure that you have Python 3.10 installed and available. Python 3.10 is not quite officially released. But that's okay, it's far enough along that we can use it! You can find the latest information on how to access it at Python [website](https://www.python.org/downloads/release/python-3100rc2/).
+The next step is to make sure that you have Python 3.10 installed and available. Python 3.10 is a very new version of Python and is a *requirement* for this assignment. If you do not have Python 3.10 you will not be able to complete this assignment. If you have trouble installing/configuring Python 3.10 on your computer, please reach out to me!
 
 The final step before you get started programming is to make sure that you can execute the code in `shakedown_stimpl.py`. If you have a sane Python 3.10 installation and everything configured correctly, you should see
 
@@ -374,6 +410,8 @@ All tests ran successfully!
 ```
 
 printed on the screen! In fact, if you see that message, you will know that your grade will be at least 80% (see below).
+
+That said, there are *many* tests in that file and the output can be overwhelming. The best way to work on this project is to implement the evaluation functionality for different expressions one at a time. For each expression type that you implement, write very small, targeted STIMPL programs that use that expression and don't move on until your code works.
 
 ## Grading
 
