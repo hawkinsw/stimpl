@@ -59,6 +59,8 @@ Sequence(Assign(Variable("five"), IntLiteral(10)),\
 
 have a value of 1 and type of integer.
 
+Yes, STIMPL supports empty `Program`s and `Sequence`s. The value and type of such a `Program`/`Sequence` _ren_ and _unit_, respectively. 
+
 It stands to reason that because every expression in STIMPL has a value and a type, an assignment expression has a value and a type. An assignment expression's value and type are the value assigned and its type. For example, the assignment expression
 
 `Assign(Variable("five"), IntLiteral(10))`
@@ -277,6 +279,8 @@ will raise an `InterpSyntaxError` at runtime.
 4. The value of a mathematical operation is the result of the mathematical operation and its type is integer or floating point, depending on the type of the parameters.
 5. The value and type of an if expression is the value and type of the last expression in the sequence of expressions executed based on the value of the condition.
 6. The value and type of a while expression is false and boolean.
+7. The value and type of a program/sequence expression is the value and type of the last expression in the program/sequence's body
+      - In the case where the body is empty, the value and the type of the program/sequence expression is ren and unit, respectively.
 
 ### STIMPL Implementation
 

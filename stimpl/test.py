@@ -49,40 +49,6 @@ def check_run_result(expected, actual):
 
 def run_stimpl_sanity_tests():
     try:
-
-        # Basic variable read/write
-        program = Program(Assign(Variable("i"), Ren()), Variable("i"))
-        check_run_result((None, Unit(), None), run_stimpl(program))
-
-        program = Program(Assign(Variable("i"), IntLiteral(1)), Variable("i"))
-        check_run_result((1, Integer(), None), run_stimpl(program))
-
-        program = Program(
-            Assign(Variable("i"), FloatingPointLiteral(1.0)), Variable("i"))
-        check_run_result((1, FloatingPoint(), None), run_stimpl(program))
-
-        program = Program(
-            Assign(Variable("i"), StringLiteral("test")), Variable("i"))
-        check_run_result(("test", String(), None), run_stimpl(program))
-
-        program = Program(
-            Assign(Variable("i"), BooleanLiteral(True)), Variable("i"))
-        check_run_result((True, Boolean(), None), run_stimpl(program))
-
-        # Syntax error handling (5 pts)
-
-        # Runtime syntax error to read from a variable before assignment
-        program = Program(Variable("i"))
-        check_program_raises(InterpSyntaxError(), program)
-
-        # Assigning to something that is not a variable is a compile-
-        # time syntax error.
-        try:
-            program = Assign(IntLiteral(10), IntLiteral(10))
-        except Exception as e:
-            if not isinstance(e, InterpSyntaxError):
-                raise e
-
         # Mathematical Expressions (5 pts)
         program = Add(IntLiteral(10), IntLiteral(10))
         check_run_result((20, Integer(), None), run_stimpl(program))
@@ -291,6 +257,45 @@ def run_stimpl_sanity_tests():
         program = Not(Ren())
         check_program_raises(InterpTypeError(), program)
 
+        # Basic expression/sequence evaluation
+        program = Program(IntLiteral(1), IntLiteral(2), IntLiteral(3))
+        check_run_result((3, Integer(), None), run_stimpl(program))
+
+        program = Program()
+        check_run_result((None, Unit(), None), run_stimpl(program))
+
+        # Basic variable read/write
+        program = Program(Assign(Variable("i"), Ren()), Variable("i"))
+        check_run_result((None, Unit(), None), run_stimpl(program))
+
+        program = Program(Assign(Variable("i"), IntLiteral(1)), Variable("i"))
+        check_run_result((1, Integer(), None), run_stimpl(program))
+
+        program = Program(
+            Assign(Variable("i"), FloatingPointLiteral(1.0)), Variable("i"))
+        check_run_result((1, FloatingPoint(), None), run_stimpl(program))
+
+        program = Program(
+            Assign(Variable("i"), StringLiteral("test")), Variable("i"))
+        check_run_result(("test", String(), None), run_stimpl(program))
+
+        program = Program(
+            Assign(Variable("i"), BooleanLiteral(True)), Variable("i"))
+        check_run_result((True, Boolean(), None), run_stimpl(program))
+
+        # Syntax error handling (5 pts)
+
+        # Runtime syntax error to read from a variable before assignment
+        program = Program(Variable("i"))
+        check_program_raises(InterpSyntaxError(), program)
+
+        # Assigning to something that is not a variable is a compile-
+        # time syntax error.
+        try:
+            program = Assign(IntLiteral(10), IntLiteral(10))
+        except Exception as e:
+            if not isinstance(e, InterpSyntaxError):
+                raise e
         # Make sure that sequences work in the proper order (10 pts)
         # i = 0
         # j = (i = i + 1)
