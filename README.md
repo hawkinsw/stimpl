@@ -4,7 +4,9 @@
 
 STIMPL is a Turing-complete imperative programming language -- it includes dynamically typed variables, mathematical expressions, (basic) console IO, loops, and conditionals. Though the binding of variables to types is done at runtime (in particular, the time of the first assignment), the language is strongly typed -- type errors are always detected! STIMPL has no scopes and no functions.
 
-Here is a short example STIMPL program that assigns the value of `4` as an integer type) to a variable `four`:
+In STIMPL, *everything* is an expression. There are no statements. The *syntax* of STIMPL might look a little odd. It's not like any other programming language you might have seen. That's because the syntax that you are going to write does not have to be the *only* syntax that STIMPL supports. Think about the syntax that you are going to learn for STIMPL as the syntax you would use to write down (*serialize*) the abstract syntax tree for a valid STIMPL program. As we discussed in the Module on Syntax and Grammars, a parser will turn the source code for a program into a tree that represents the different components of a program. When you write your STIMPL programs in the syntax defined here, you are allowing us to skip the step of writing the grammar/parser/etc and giving us the freedom to jump to the fun part of building a language -- implementing its behavior!
+
+Here is a short example STIMPL program that assigns the value of `4` (as an integer type which results from adding together two literal `2`s) to a variable `four`:
 
 ```
 Program(Assign(Variable("four"), Add(IntLiteral(2), IntLiteral(2))))
@@ -14,7 +16,7 @@ You can _read_ that program like this:
 
 > Assign variable `four` to the result of the addition of the integer literal 2 with the integer literal of 2.
 
-Everything in STIMPL is an expression. In other words, everything in STIMPL has a type and a value. The most basic expression in STIMPL is the _ren_ \-- it has no value and a _unit_ type. In STIMPL you generate a ren like
+Again, everything in STIMPL is an expression. In other words, everything in STIMPL has a type and a value. The most basic expression in STIMPL is the _ren_ \-- it has no value and a _unit_ type. In STIMPL you generate a ren like
 
 ```
 Ren()
@@ -183,11 +185,11 @@ Here are the runtime type rules:
 
 1.  The first assignment to a variable defines that variable's type.
 2.  Once a variable's type has been defined, only expressions of matching type can be assigned to that variable.
-3.  Operands to binary operators must have the same type.
+3.  Both operands to binary operators must have the same type.
 4.  Relational operators are defined for (matching) operands of every type (see below for the exact details).
 5.  And/or/not operators are only defined for (matching) operands of boolean type.
 6.  Add, Subtract, Multiply and Divide operators are defined for (matching) operands of integer and floating-point types.
-7.  The add operator is defined for (matching) operands of string types.
+7.  The add operator is defined for (matching) operands of string types and functions as string concatenation.
 8.  The condition expression in if/while expressions must have a boolean type.
 
 If any of these these rules is violated, STIMPL raises an `InterpTypeError` at runtime.
@@ -263,7 +265,7 @@ will raise an `InterpSyntaxError` at runtime.
 4.  Unit is equal to unit.
 5.  Boolean operators behave "as usual".
 6.  Add, Subtract, Multiply and Divide operators work "as usual" on floating-point values.
-7. The divide operator performs integer division when its parameters are integers (_e.g._, 5/10 = 0)
+7. The divide operator performs integer division when its parameters are integers (_e.g._, 5/10 = 0). When the operands to a division operator are both floating-points, then the result has "precision" (_e.g._, 5.0 / 10.0 = 0.5).
 8. An attempt to divide by zero (either floating-point or integer) raises an `InterpMathError`.
 9. Add operator performs string concatenation when its operands are string values.
 10. Operands are evaluated left-to-right.
@@ -288,13 +290,13 @@ You have been given a significant amount of skeleton code to start your implemen
 
 ## State
 
-As the program executes, it always has a state to hold the current value of the program's variables and their types. The interpreter uses the `State` class defined and (partially) implemented in the provided code (`stimpl/runtime.py`) to manage the program's state. To update values in a state, use the `set_value` method. The `set_value` method takes three parameters: The variable name, the variable value and the variable type. **_`set_value` will not update the state in place -- it will return a copy of the existing state with the appropriate variable updated_**. To retrieve a value from the current state, use the `get_value` method. The `get_value` method returns a tuple whose first element is the variable value and whose second element is the variable type; if `get_value` is called for a variable that is not yet defined in the current state, `None` is returned.
+As the program executes, it always has a state to hold the current value of the program's variables and their types. The interpreter uses the `State` class defined and (partially) implemented in the provided code (`stimpl/runtime.py`) to manage the program's state. To update values in a state, use the `set_value` method. The `set_value` method takes three parameters: The variable name, the new variable value and the new variable type. **_`set_value` will not update the state in place -- it will return a copy of the existing state with the appropriate variable updated_**. To retrieve a value from the current state, use the `get_value` method. The `get_value` method returns a tuple whose first element is the variable value and whose second element is the variable type; if `get_value` is called for a variable that is not yet defined in the current state, `None` is returned.
 
 ## Evaluate
 
 `evaluate` (`stimpl/runtime.py`) is the main driver of the STIMPL interpreter. As parameters, it takes a variable whose type is a STIMPL expression and a variable whose type is a program state.
 
-```
+```Python
 def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State]:
 ```
 
@@ -428,3 +430,14 @@ Your grade will be calculated (out of 100 total possible points) according to th
 | 10 | Hygiene | You will receive up to 10 points depending on the hygiene of your code -- good comments, good style, good variable names, modularity, etc. |
 
 
+## What And How To Submit
+
+All submissions for this assignment will be made through Gradescope, as usual. Like the first assignment, Gradescope will be relatively picky about how you submit. The best advice I can give follows:
+
+1. Create a zip file that contains all your source code (yes, *all* your source code, even the code contained in the skeleton). 
+1. In that zip file, make sure that `shakedown_stimpl.py` and `test_stimpl.py` are in the *root* folder.
+1. Submit to Gradescope by dragging/dropping that zip file on the modal dialog box that pops up when you click the `Submit` button. Your dialog box should look like the one shown below).
+
+![How your submission modal dialog box should look when you submit to Gradescope.](./assets/submission-modal.png)
+
+For additional information, please watch the video about submitting (once it is available).
