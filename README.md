@@ -16,7 +16,7 @@ You can _read_ that program like this:
 
 > Assign variable `four` to the result of the addition of the integer literal 2 with the integer literal of 2.
 
-Again, everything in STIMPL is an expression. In other words, everything in STIMPL has a type and a value. The most basic expression in STIMPL is the _ren_ \-- it has no value and a _unit_ type. In STIMPL you generate a ren like
+Again, everything in STIMPL is an expression. In other words, everything in STIMPL has a type and a value. The most basic expression in STIMPL is the _ren_ \-- it has no value (`None`) and a _unit_ type. In STIMPL you generate a ren like
 
 ```
 Ren()
@@ -61,7 +61,7 @@ Sequence(Assign(Variable("five"), IntLiteral(10)),\
 
 have a value of 1 and type of integer.
 
-Yes, STIMPL supports empty `Program`s and `Sequence`s. The value and type of such a `Program`/`Sequence` _ren_ and _unit_, respectively. 
+Yes, STIMPL supports empty `Program`s and `Sequence`s. The value and type of such a `Program`/`Sequence` is `None` and _unit_, respectively.
 
 It stands to reason that because every expression in STIMPL has a value and a type, an assignment expression has a value and a type. An assignment expression's value and type are the value assigned and its type. For example, the assignment expression
 

@@ -231,23 +231,25 @@ Combining forms.
 
 
 class Program(Expr):
-    def __init__(self, expr, *exprs):
-        if expr is None:
-            raise InterpSyntaxError("Cannot have a program with no expressions.")
-        self.exprs = [expr] + list(exprs)
+    def __init__(self, *exprs):
+        self.exprs = exprs
 
     def __repr__(self):
-        return "Program: " + ";\n".join([repr(x) for x in self.exprs])
+        exprs = self.exprs
+        if len(exprs) == 0:
+            exprs = ["None"]
+        return "Program: " + ";\n".join([repr(x) for x in exprs])
 
 
 class Sequence(Expr):
-    def __init__(self, expr, *exprs):
-        if expr is None:
-            raise InterpSyntaxError("Cannot have a sequence with no expressions.")
-        self.exprs = [expr] + list(exprs)
+    def __init__(self, *exprs):
+        self.exprs = exprs
 
     def __repr__(self):
-        return "Sequence: " + ";\n".join([repr(x) for x in self.exprs])
+        exprs = self.exprs
+        if len(exprs) == 0:
+            exprs = ["None"]
+        return "Sequence: " + ";\n".join([repr(x) for x in exprs])
 
 
 class If(Expr):
