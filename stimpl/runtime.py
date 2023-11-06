@@ -141,7 +141,7 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
 
             if left_type != right_type:
                 raise InterpTypeError(f"""Mismatched types for And:
-            Cannot add {left_type} to {right_type}""")
+            Cannot evaluate {left_type} and {right_type}""")
             match left_type:
                 case Boolean():
                     result = left_value and right_value
@@ -171,7 +171,7 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
 
             if left_type != right_type:
                 raise InterpTypeError(f"""Mismatched types for Lt:
-            Cannot compare {left_type} to {right_type}""")
+            Cannot compare {left_type} and {right_type}""")
 
             match left_type:
                 case Integer() | Boolean() | String() | FloatingPoint():
