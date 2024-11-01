@@ -1,28 +1,51 @@
 # STIMPL
 
-<img src="./assets/stimpy.png" align="left">
+![](./assets/stimpy.png)
 
 STIMPL is a Turing-complete imperative programming language -- it includes dynamically typed variables, mathematical expressions, (basic) console IO, loops, and conditionals. Though the binding of variables to types is done at runtime (in particular, the time of the first assignment), the language is strongly typed -- type errors are always detected! STIMPL has no scopes and no functions.
 
-In STIMPL, *everything* is an expression. There are no statements. The *syntax* of STIMPL might look a little odd. It's not like any other programming language you might have seen. That's because the syntax that you are going to write does not have to be the *only* syntax that STIMPL supports. Think about the syntax that you are going to learn for STIMPL as the syntax you would use to write down (*serialize*) the abstract syntax tree for a valid STIMPL program. As we discussed in the Module on Syntax and Grammars, a parser will turn the source code for a program into a tree that represents the different components of a program. Because we write STIMPL programs in the syntax defined here, we can skip the tedious steps of writing the grammar/parser/etc and jump to the fun part of building a language -- implementing its behavior!
+In STIMPL, *everything* is an expression. There are no statements. The _syntax_ of STIMPL might look a little odd. It's not like any other programming language you might have seen. That's because the syntax that you are going to write does not have to be the *only* syntax that STIMPL supports. Think about the syntax that you are going to learn for STIMPL as the syntax you would use to write down (_serialize_) the abstract syntax tree for a valid STIMPL program. As we discussed in the Module on Syntax and Grammars, a parser will turn the source code for a program into a tree that represents the different components of a program. 
 
-Here is a short example STIMPL program that assigns the value of `4` (as an integer type which results from adding together two literal `2`s) to a variable `four`:
+Writing parsers is notoriously annoying, difficult and time consuming. Learning the ins/outs of writing a parser is something that you will do in a course on compilers[^compilercourse]. I think that writing a parser is one of the neatest things that we do in computer science. That said, spending time on implementing a parser keeps us from doing work that is even more interesting: implementing the language's behavior. 
+
+[^compilercourse]: Here at UC, the course on compilers is offered as EECE 5183 - Compiler Theory and Practice.
+
+Before digging in to a precise description of STIMPL, let's examine a short example STIMPL program that assigns the value of `4` (as an integer type whose value is calculated by adding together two literal `2`s) to a variable `four`:
 
 ```
 Program(Assign(Variable("four"), Add(IntLiteral(2), IntLiteral(2))))
 ```
 
-You can _read_ that `Program` like this:
+That `Program` has a single expression: the assignment expression. When evaluated, that `Program`
+
+- will have the side effect of storing the result of the addition of two integer literals (`2` and `2`) into variable `four`, and
+- will evaluate to the value/type of `4`/`Integer`.
+
+We can _speak_ that program like
 
 > `Assign` `Variable` `four` to the result of the `Add`ition of the `Int`-eger `Literal` `2` with the `Int`eger `Literal` of `2`.
 
-Again, everything in STIMPL is an expression. In other words, everything in STIMPL has a value and, because STIMPL is strongly typed, everything in STIMPL has a type. The most basic expression in STIMPL is the _ren_ \-- it has no value (`None`) and a _unit_ type. In STIMPL you generate a ren like
+Again, everything in STIMPL is an expression[^program_expression]. In other words, everything in STIMPL has a value and, because STIMPL is strongly typed, everything in STIMPL has a type.
+
+[^program_expression]: Yes, even `Program`s. Keep reading.
+
+At first, STIMPL programs may be a little hard to read because of all those parenthesis. I promise, though, it will get easier with practice.
+
+In C++, it is possible to specify _statements_ execute back-to-back by separating them with the `;`. In STIMPL, it is possible to specify that expressions be evaluated back to back by combining them in a `Program` or `Sequence`  (see below) and separating each with a `,`.
+
+If you wanted to write a program where $Expression1$ and $Expression2$ are evaluated back to back, you could simply write:
+
+`Program(`$Expression1$`,` $Expression2$`)`
+
+Because expressions in STIMPL can contain other expressions, that simple syntax hides the language's power. As we continue to explore the language you will begin to see more of its power.
+
+The most basic expression in STIMPL is the _ren_ -- it has no value (actually, it has a value, but that value is `None`) and a _unit_ type. In STIMPL you generate a ren like
 
 ```
 Ren()
 ```
 
-In STIMPL, you reference variables like
+In STIMPL, you reference variables in an expression like
 
 ```
 Variable("i")
@@ -51,7 +74,7 @@ or
 
 `Sequence(`_expression_`[, `_expression_`[,...]])`
 
-respectively, where _expression_ is any expression (even another program or sequence because, again, *everything* in STIMPL is an expression!).
+respectively, where _expression_ is any expression (even another program or sequence because, again, _everything_ in STIMPL is an expression!).
 
 The value and type of a sequence/program of expressions are the value and type of the final expression in the sequence/program. For example:
 
@@ -67,17 +90,17 @@ Sequence(Assign(Variable("five"), IntLiteral(10)),\
       IntLiteral(1))
 ```
 
-have a value of 1 and type of integer.
+are expressions that have a value of 1 and type of _integer_.
 
-      > Note: We have to use the `\` when we break a single STIMPL expression across multiple lines because we are using the Python parser. Because the Python language is sensitive to line breaks and indentation, the `\` at the end of the line is used to tell Python that this line "continues" on the next line and make sure that the Python parser does not treat it is a normal end-of-line. 
+> Note: We have to use the `\` when we break a single STIMPL expression across multiple lines because we are using the Python interpreter to parse our STIMPL programs. Because the Python language is sensitive to line breaks and indentation, the `\` at the end of the line is used to tell Python that this line "continues" on the next line and makes sure that the Python parser does not treat it is a normal end-of-line. 
 
 Yes, STIMPL supports empty `Program`s and `Sequence`s. The value and type of such a `Program`/`Sequence` is `None` and _unit_, respectively.
 
-It stands to reason that because every expression in STIMPL has a value and a type, an assignment expression has a value and a type. An assignment expression's value and type are the value assigned and its type. For example, the assignment expression
+It stands to reason that because every expression in STIMPL has a value and a type, an assignment expression has a value and a type. An assignment expression's value and type are the value newly assigned to the variable and its type. For example, the assignment expression
 
 `Assign(Variable("five"), IntLiteral(10))`
 
-has a value of 10 and a type of integer.
+has a value of 10 and a type of _integer_.
 
 In STIMPL, it's easy to print the value of an expression to the screen:
 
@@ -89,7 +112,23 @@ prints the value of the _ren_ to the screen. In general, the syntax for printing
 
 where _expression_ is any expression.
 
-STIMPL has _boolean_, _string_, _floating-point number,_ _integer_, and _unit_ types. You can perform the normal mathematical operations on integers and floating-point numbers:
+STIMPL has _boolean_, _string_, _floating-point number,_ _integer_, and _unit_ types. 
+
+There are expressions in STIMPL to create values with those types _ex nihilo_:
+
+```
+BooleanLiteral(True)
+```
+
+is an expression whose value is true and type is _boolean_.
+
+```
+StringLiteral("This is cool!")
+```
+
+is an expression whose value is "This is cool!" and type is _string_. `FloatingPointLiteral`  and `IntLiteral` work analogously.
+
+You can perform the normal mathematical operations on values whose type is _integer_ and values whose type is _floating point_:
 
 ```
 Sequence(\
@@ -98,6 +137,31 @@ Sequence(\
       Multiply(IntLiteral(5), IntLiteral(5)),\
       Divide(FloatingPointLiteral(25.0), FloatingPointLiteral(25.0)))
 ```
+> That's a pretty complicated STIMPL expression. So, let's break that down! There are four expressions embedded in that sequence. The first is
+
+```
+Add(FloatingPointLiteral(5.0), FloatingPointLiteral(5.0)),
+```
+
+> That expression `Add`s two floating-point literals (each created using the `FloatingPointLiteral` expression). After evaluating that expression, STIMPL evaluates the 
+
+```
+Subtract(IntLiteral(5), IntLiteral(5)),\
+```
+
+> expression. That expression `Subtract`s two integer literals (each created using the `IntLiteral` expression). Then, STIMPL evaluates
+
+```
+Multiply(IntLiteral(5), IntLiteral(5)),\
+```
+
+> expression. That expression `Multiply`s two integer literals (each created using the `IntLiteral` expression). Then, STIMPL evaluates
+
+```
+Divide(FloatingPointLiteral(25.0), FloatingPointLiteral(25.0)))
+```
+
+> expression. That expression `Divides`s two literals (one created using the `IntLiteral` expression and the other created using the `FloatingPointLiteral` expression). Having evaluated each of its subexpressions, STIMPL will calculate the value and the type of the `Sequence` expression. Having learned the semantics of the `Sequence` expression, can you determine the value and type of this expression?
 
 _**All operands are evaluated left-to-right.**_
 
@@ -107,14 +171,7 @@ You can also perform "addition" on strings -- concatenation:
 Add(StringLiteral("testing"), StringLiteral(", one two three."))
 ```
 
-And, we can't forget about booleans!
-
-```
-BooleanLiteral(True)
-BooleanLiteral(False)
-```
-
-You can operate on booleans with logical ands, ors and nots:
+And, we can't forget about booleans! You can operate on booleans with logical ands, ors and nots:
 
 ```
 And(BooleanLiteral(True), BooleanLiteral(False))
@@ -151,11 +208,11 @@ Else
 
 Not to sound like a broken record, but because everything in STIMPL is an expression, if expressions have a value and a type. The value and type of the expression in the example above are `"Else"` and string, respectively. In general, the syntax for an if expression is
 
-`If(` _expression_ `,`  _expression_ `, ` _expression_ `)`
+`If(` _expression_ `,` _expression_ `, ` _expression_ `)`
 
-where the first expression is any expression whose type is boolean and the second and third expressions have matching types. The second expression is evaluated when the value of the first expression is true. The third expression is evaluated when the value of the first expression is false.[^1]. If you don't want to do anything in the case that the value of the first expression is false, use `Ren()` as the second expression.
+where the first expression is any expression whose type is _boolean_ and the second and third expressions have matching types. The second expression is evaluated when the value of the first expression is true. The third expression is evaluated when the value of the first expression is false.[^if_expression]. If you don't want to do anything in the case that the value of the first expression is false, use `Ren()` as the second expression.
 
-[^1]: It might be easier to understand the semantics of the if expression if you think of its syntax as `If(` _condition_ `,` _then_ `,` _else_ `)` where _condition_, _then_, and _else_ are expressions.
+[^if_expression]: It might be easier to understand the semantics of the if expression if you think of its syntax as `If(` _condition_ `,` _then_ `,` _else_ `)` where _condition_, _then_, and _else_ are expressions.
 
 And, don't forget loops:
 
@@ -187,11 +244,11 @@ That program will print:
 
 In general, the format of a while-loop expression is
 
-`While(` _expression_, _expression_ `)`
+`While(` _expression_ `, ` _expression_ `)`
 
-where the first expression is any expression with a boolean type and the second expression is any expression.[^2] The value and type of a while loop are false and boolean.
+where the first expression is any expression with a boolean type and the second expression is any expression.[^while_expression] The value and type of a while loop are false and boolean.
 
-[^2]: It might be easier to understand the semantics of the while expression if you think of its syntax as `While(` _condition_ `,` _body_ `)` where _condition_, and _body_ are expressions.
+[^while_expression]: It might be easier to understand the semantics of the while expression if you think of its syntax as `While(` _condition_ `,` _body_ `)` where _condition_, and _body_ are expressions.
 
 # STIMPL Requirements
 
@@ -213,10 +270,10 @@ Here are the runtime type rules:
 2.  Once a variable's type has been defined, only values of matching type can be assigned to that variable.
 3.  Both operands to binary operators must have the same type.
 4.  Relational operators are defined for (matching) operands of every type (see below for the exact details).
-5.  And/or/not operators are only defined for (matching) operands of boolean type.
-6.  Add, Subtract, Multiply and Divide operators are defined for (matching) operands of integer and floating-point types.
-7.  The add operator is defined for (matching) operands of string types and behaves like string concatenation.
-8.  The condition expression in if/while expressions must have a boolean type.
+5.  And/or/not operators are only defined for (matching) operands of _boolean_ type.
+6.  Add, Subtract, Multiply and Divide operators are defined for (matching) operands of _integer_ and _floating-point_ types.
+7.  The add operator is defined for (matching) operands of _string_ types and behaves like string concatenation.
+8.  The condition expression in if/while expressions must have a _boolean_ type.
 
 If any of these these rules is violated, STIMPL raises an `InterpTypeError` at runtime.
 
@@ -266,8 +323,8 @@ will cause an `InterpTypeError`.
 
 Because STIMPL programs are syntactically correct Python programs, most syntax errors (e.g., mismatched parenthesis) will be caught by the Python parser. However, there are two syntax errors that STIMPL handles explicitly:
 
-1.  It is a syntax error to assign to an expression that is not a variable. If this is detected, STIMPL raises an `InterpSyntaxError` at compile time.
-2.  It is a syntax error to read from a variable that does not have a value. If this is detected, STIMPL raises an `InterpSyntaxError` at runtime.
+1. It is a syntax error to assign to an expression that is not a variable. If this is detected, STIMPL raises an `InterpSyntaxError` at compile time.
+2. It is a syntax error to read from a variable that does not have a value. If this is detected, STIMPL raises an `InterpSyntaxError` at runtime.
 
 By rule (1),
 
@@ -285,30 +342,30 @@ will raise an `InterpSyntaxError` at runtime.
 
 ## Semantics
 
-1.  Relational/equality operators behave "as usual" for when the parameters are integer or floating-point types.
-2.  Relational operators perform [lexicographical comparison](https://en.wikipedia.org/wiki/Lexicographic_order) when the parameters are string types.
+1.  Relational/equality operators behave "as usual" for when the parameters are _integer_ or _floating-point_ types.
+2.  Relational operators perform [lexicographical comparison](https://en.wikipedia.org/wiki/Lexicographic_order) when the parameters are _string_ types.
 3.  False is less than true.
 4.  Unit is equal to unit.
 5.  Boolean operators behave "as usual".
-6.  Add, Subtract, Multiply and Divide operators work "as usual" on floating-point values.
-7. The divide operator performs integer division when its parameters are integers (_e.g._, 5/10 = 0). When the operands to a division operator are both floating-points, then the result has "precision" (_e.g._, 5.0 / 10.0 = 0.5).
+6.  Add, Subtract, Multiply and Divide operators work "as usual" on _floating-point_ values.
+7. The divide operator performs integer division when its parameters are .*integer*s (_e.g._, 5/10 = 0). When the operands to a division operator are both *floating-point*s, then the result has "precision" (_e.g._, 5.0 / 10.0 = 0.5).
 8. An attempt to divide by zero (either floating-point or integer) raises an `InterpMathError`.
-9. The Add operator performs string concatenation when its operands are string values.
+9. The Add operator performs string concatenation when its operands are *string*s.
 10. Operands are evaluated left-to-right.
 11. There is _no_ short-circuit evaluation.
-12. The expression constituting the body of a while loop is repeatedly evaluated until the expression consistituting the condition evaluates to false.
+12. The expression constituting the body of a while loop is repeatedly evaluated until the expression constituting the condition evaluates to false.
 13. The expression constituting the then branch of an if expression is evaluated when the expression constituting the condition evaluates to true; the expression constituting the else branch of an if expressions is evaluated otherwise.
 
 ## Values and Types
 
 1. Literals have the expected values and types.
 2. The value and type of an assignment expression is the value and type of the right-hand side of the expression.
-3. The value and type of a relational expression is the result of the relation and its type is boolean.
-4. The value of a mathematical operation is the result of the mathematical operation and its type is integer or floating point, depending on the type of the parameters.
+3. The value and type of a relational expression is the result of the relation and its type is _boolean_.
+4. The value of a mathematical operation is the result of the mathematical operation and its type is _integer_ or _floating-point_, depending on the type of the parameters.
 5. The value and type of an if expression is the value and type of the last expression in the sequence of expressions executed based on the value of the condition.
-6. The value and type of a while expression is false and boolean.
+6. The value and type of a while expression is false and _boolean_.
 7. The value and type of a program/sequence expression is the value and type of the last expression in the program/sequence's body
-      - In the case where the body is empty, the value and the type of the program/sequence expression is ren and unit, respectively.
+      - In the case where the body is empty, the value and the type of the program/sequence expression is ren and _unit_, respectively.
 
 ### STIMPL Implementation
 
@@ -364,18 +421,18 @@ Take a very close look at the expressions that are already implemented in `evalu
 
 ## Interpreter Errors
 
-There are two pre-defined exceptions for you to use to signal a program error -- `InterpTypeError` and `InterpSyntaxError` (`stimpl/errors.py`).  You can `raise` these exceptions to signal errors according to the specifications of STIMPL.
+There are two pre-defined exceptions for you to use to signal a program error -- `InterpTypeError` and `InterpSyntaxError` (`stimpl/errors.py`). You can `raise` these exceptions to signal errors according to the specifications of STIMPL.
 
 ## Types
 
-There are classes already defined for the integer, floating-point, string and boolean types (`stimpl/types.py`). These classes already have built-in functionality for equality testing. In other words,
+There are classes already defined for the _integer_, _floating-point_, _string_ and _boolean_ STIMPL types (`stimpl/types.py`). These classes already have built-in functionality for equality testing. In other words,
 
 ```Python
   FloatingPoint() == FloatingPoint()
   String() == String()
 ```
 
-etc. You will want to use this built-in equality functionality when checking to make sure that operands to operators are of matching type and to determine, for example, whether an operand to a boolean operator is a boolean type.
+etc. You will want to use this built-in equality functionality when checking to make sure that operands to operators are of matching type and to determine, for example, whether an operand to a boolean operator is a _boolean_ type.
 
 ## Literals
 
