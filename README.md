@@ -171,6 +171,9 @@ You can also perform "addition" on strings -- concatenation:
 Add(StringLiteral("testing"), StringLiteral(", one two three."))
 ```
 
+Or, at least you can when you implement it!
+
+
 And, we can't forget about booleans! You can operate on booleans with logical ands, ors and nots:
 
 ```
