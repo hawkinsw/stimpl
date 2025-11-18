@@ -19,10 +19,10 @@ class State(object):
         variable_value, variable_type = self.value
         return State(self.variable_name, variable_value, variable_type, self.next_state)
 
-    def set_value(self, variable_name, variable_value, variable_type):
+    def set_value(self, variable_name: str, variable_value: Expr, variable_type: Type):
         return State(variable_name, variable_value, variable_type, self)
 
-    def get_value(self, variable_name) -> Any:
+    def get_value(self, variable_name: str) -> Any:
         """ TODO: Implement. """
         return None
 
@@ -37,7 +37,7 @@ class EmptyState(State):
     def copy(self) -> 'EmptyState':
         return EmptyState()
 
-    def get_value(self, variable_name) -> None:
+    def get_value(self, variable_name: str) -> None:
         return None
 
     def __repr__(self) -> str:
@@ -47,12 +47,10 @@ class EmptyState(State):
 """
 Main evaluation logic!
 """
-
-
 def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State]:
     match expression:
         case Ren():
-            return (None, Unit(), state)
+            return ((), Unit(), state)
 
         case IntLiteral(literal=l):
             return (l, Integer(), state)
@@ -87,6 +85,9 @@ def evaluate(expression: Expr, state: State) -> Tuple[Optional[Any], Type, State
             if value == None:
                 raise InterpSyntaxError(
                     f"Cannot read from {variable_name} before assignment.")
+            # Now that we know the result from `get_value` is not None,
+            # we can look at the (v, tau) pieces of `value` that we know
+            # forms its return value.
             variable_value, variable_type = value
             return (variable_value, variable_type, state)
 
