@@ -161,7 +161,7 @@ Multiply(IntLiteral(5), IntLiteral(5)),\
 Divide(FloatingPointLiteral(25.0), FloatingPointLiteral(25.0)))
 ```
 
-> expression. That expression `Divides`s two literals (one created using the `IntLiteral` expression and the other created using the `FloatingPointLiteral` expression). Having evaluated each of its subexpressions, STIMPL will calculate the value and the type of the `Sequence` expression. Having learned the semantics of the `Sequence` expression, can you determine the value and type of this expression?
+> expression. That expression `Divides`s two literals (both created using the `FloatingPointLiteral` expression). Having evaluated each of its subexpressions, STIMPL will calculate the value and the type of the `Sequence` expression. Having learned the semantics of the `Sequence` expression, can you determine the value and type of this expression?
 
 _**All operands are evaluated left-to-right.**_
 
