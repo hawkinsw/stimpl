@@ -92,7 +92,7 @@ Sequence(Assign(Variable("five"), IntLiteral(10)),\
 
 are expressions that have a value of 1 and type of _integer_.
 
-> Note: We have to use the `\` when we break a single STIMPL expression across multiple lines because we are using the Python interpreter to parse our STIMPL programs. Because the Python language is sensitive to line breaks and indentation, the `\` at the end of the line is used to tell Python that this line "continues" on the next line and makes sure that the Python parser does not treat it is a normal end-of-line. 
+> Note: We have to use the `\` when we break a single STIMPL expression across multiple lines because we are using the Python interpreter to parse our STIMPL programs. Because the Python language is sensitive to line breaks and indentation, the `\` at the end of the line is used to tell Python that this line "continues" on the next line and makes sure that the Python parser does not treat it as a normal end-of-line. 
 
 Yes, STIMPL supports empty `Program`s and `Sequence`s. The value and type of such a `Program`/`Sequence` is `None` and _unit_, respectively.
 
